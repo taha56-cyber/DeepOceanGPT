@@ -9,7 +9,7 @@
 [![Transformers](https://img.shields.io/badge/🤗%20Transformers-latest-yellow.svg)](https://huggingface.co/docs/transformers)
 [![Trained on Kaggle](https://img.shields.io/badge/Trained%20on-Kaggle-20BEFF.svg)](https://www.kaggle.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Model on HF](https://img.shields.io/badge/🤗%20Model-Hugging%20Face-orange.svg)](https://huggingface.co/your-username/taha-karmani)
+[![Model on HF](https://img.shields.io/badge/🤗%20Model-Hugging%20Face-orange.svg)](https://huggingface.co/taha56-cyber/taha-karmani)
 
 [**Animated Demo**](#-animated-demo) · [**Quickstart**](#-quickstart) · [**Architecture**](#-architecture) · [**Training**](#-training-pipeline) · [**Limitations**](#-limitations)
 
@@ -39,7 +39,11 @@ Every layer of the stack was built and trained in this project:
 
 <div align="center">
 
-### ▶️ [Watch the animated explainer](https://taha56-cyber.io/taha-karmani/)
+<a href="https://taha56-cyber.github.io/taha-karmani/">
+  <img src="docs/taha-karmani-demo.svg" alt="Taha Karmani Animated Demo" width="100%" />
+</a>
+
+### ▶️ [Watch the interactive full-screen explainer](https://taha56-cyber.github.io/taha-karmani/)
 
 *An auto-playing, in-browser walkthrough: data → tokenizer → architecture → training → chat. Source: [`docs/index.html`](docs/index.html)*
 
@@ -53,15 +57,10 @@ I am Taha Karmani, a small language model trained from scratch to talk about the
 
 <|user|>Why are coral reefs important?<|assistant|>
 (paste a real output from your final model here)
-```
+⚠️ Replace the second answer with a real generation from your trained checkpoint. Honest examples build more trust than polished ones.
 
-> ⚠️ Replace the second answer with a real generation from your trained checkpoint. Honest examples build more trust than polished ones.
-
----
-
-## 🏗 Architecture
-
-```mermaid
+🏗 Architecture
+Extrait de code
 flowchart LR
     A[Raw text] --> B[Byte-level BPE<br/>16k vocab]
     B --> C[Token embeddings<br/>512-d, tied]
@@ -69,36 +68,26 @@ flowchart LR
     D --> E[RMSNorm]
     E --> F[LM head<br/>tied with embeddings]
     F --> G[Next-token probabilities]
-```
-
-| Hyper-parameter | Value |
-|---|---|
-| Model type | Decoder-only transformer (Llama-style) |
-| Parameters | ≈ 32M |
-| Layers | 8 |
-| Hidden size | 512 |
-| MLP size | 1408 (SwiGLU) |
-| Attention heads | 8 (4 key/value heads, grouped-query attention) |
-| Context length | 1024 tokens |
-| Vocabulary | 16,000 (byte-level BPE) |
-| Positional encoding | Rotary (RoPE) |
-| Precision | fp16 mixed precision |
-
-### Special tokens
-
-| Token | Purpose |
-|---|---|
-| `<\|pad\|>` | Padding |
-| `<\|bos\|>` | Beginning of sequence |
-| `<\|eos\|>` | End of sequence / end of answer |
-| `<\|user\|>` | Start of the user message |
-| `<\|assistant\|>` | Start of the model answer |
-
----
-
-## 🔬 Training Pipeline
-
-```mermaid
+Hyper-parameter	Value
+Model type	Decoder-only transformer (Llama-style)
+Parameters	≈ 32M
+Layers	8
+Hidden size	512
+MLP size	1408 (SwiGLU)
+Attention heads	8 (4 key/value heads, grouped-query attention)
+Context length	1024 tokens
+Vocabulary	16,000 (byte-level BPE)
+Positional encoding	Rotary (RoPE)
+Precision	fp16 mixed precision
+Special tokens
+Token	Purpose
+<|pad|>	Padding
+<|bos|>	Beginning of sequence
+<|eos|>	End of sequence / end of answer
+<|user|>	Start of the user message
+<|assistant|>	Start of the model answer
+🔬 Training Pipeline
+Extrait de code
 flowchart TD
     A[General web text<br/>FineWeb-Edu slice] --> T[Train BPE tokenizer]
     O[OceanInstruct<br/>EN question/answer pairs] --> T
@@ -109,46 +98,39 @@ flowchart TD
     O --> S
     I[Identity data<br/>Taha Karmani] --> S
     S --> F[🌊 Final model]
-```
+Stage 1: Pretraining
+Objective: causal language modelling (next-token prediction)
 
-### Stage 1: Pretraining
-- Objective: causal language modelling (next-token prediction)
-- Data: educational web text, packed into 1024-token blocks
-- Optimiser: AdamW, cosine schedule, 200 warm-up steps, peak LR `6e-4`
-- Effective batch size: 64 sequences (8 × 8 gradient accumulation)
+Data: educational web text, packed into 1024-token blocks
 
-### Stage 2: Supervised fine-tuning
-- Data: [`zjunlp/OceanInstruct`](https://huggingface.co/datasets/zjunlp/OceanInstruct) (English columns) + hand-written identity examples
-- Chat format: `<|user|>{question}<|assistant|>{answer}<|eos|>`
-- 2 epochs, LR `5e-5`
+Optimiser: AdamW, cosine schedule, 200 warm-up steps, peak LR 6e-4
 
-### Training curves
+Effective batch size: 64 sequences (8 × 8 gradient accumulation)
 
-| Metric | Value |
-|---|---|
-| Final pretraining loss | _fill in_ |
-| Final SFT loss | _fill in_ |
-| Total GPU time | _fill in_ |
+Stage 2: Supervised fine-tuning
+Data: zjunlp/OceanInstruct (English columns) + hand-written identity examples
 
----
+Chat format: <|user|>{question}<|assistant|>{answer}<|eos|>
 
-## 🚀 Quickstart
+2 epochs, LR 5e-5
 
-### 1. Install
-
-```bash
-git clone https://github.com/your-username/taha-karmani.git
+Training curves
+Metric	Value
+Final pretraining loss	fill in
+Final SFT loss	fill in
+Total GPU time	fill in
+🚀 Quickstart
+1. Install
+Bash
+git clone [https://github.com/taha56-cyber/taha-karmani.git](https://github.com/taha56-cyber/taha-karmani.git)
 cd taha-karmani
 pip install -U transformers torch datasets tokenizers accelerate
-```
-
-### 2. Chat with the model
-
-```python
+2. Chat with the model
+Python
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-repo = "your-username/taha-karmani"   # or a local folder, e.g. "./ocean-llm-final"
+repo = "taha56-cyber/taha-karmani"   # or a local folder, e.g. "./ocean-llm-final"
 tokenizer = AutoTokenizer.from_pretrained(repo)
 model = AutoModelForCausalLM.from_pretrained(repo, torch_dtype=torch.float16).to("cuda")
 
@@ -170,26 +152,19 @@ def ask(question, max_new_tokens=120):
 
 print(ask("Who are you?"))
 print(ask("What lives in the deep sea?"))
-```
+3. Reproduce the training
+Open the notebook on Kaggle and run it with GPU T4 ×2 and Internet On:
 
-### 3. Reproduce the training
-
-Open the notebook on Kaggle and run it with **GPU T4 ×2** and **Internet On**:
-
-```text
+Plaintext
 notebooks/train_from_scratch.ipynb
-```
+💡 Use Save Version → Save & Run All (Commit) so the run continues in the background and the outputs are kept.
 
-> 💡 Use **Save Version → Save & Run All (Commit)** so the run continues in the background and the outputs are kept.
-
----
-
-## 📂 Repository structure
-
-```text
+📂 Repository structure
+Plaintext
 taha-karmani/
 ├── docs/
-│   └── index.html             # animated explainer (GitHub Pages)
+│   ├── index.html             # interactive animated explainer (GitHub Pages)
+│   └── taha-karmani-demo.svg  # inline animated preview for README
 ├── notebooks/
 │   └── train_from_scratch.ipynb
 ├── src/
@@ -199,75 +174,68 @@ taha-karmani/
 │   └── chat.py                # inference
 ├── README.md
 └── LICENSE
-```
-
----
-
-## 📊 Data
-
-| Dataset | Used for | Link |
-|---|---|---|
-| FineWeb-Edu (sample) | Tokenizer + pretraining | [HuggingFaceFW/fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) |
-| OceanInstruct | Tokenizer + instruction tuning | [zjunlp/OceanInstruct](https://huggingface.co/datasets/zjunlp/OceanInstruct) |
-| Identity Q&A | Name and persona | Written by hand (in this repo) |
-
+📊 Data
+Dataset	Used for	Link
+FineWeb-Edu (sample)	Tokenizer + pretraining	HuggingFaceFW/fineweb-edu
+OceanInstruct	Tokenizer + instruction tuning	zjunlp/OceanInstruct
+Identity Q&A	Name and persona	Written by hand (in this repo)
 Please check each dataset's licence before redistributing the model or derived data.
 
----
+⚠️ Limitations
+This is an educational, small-scale model. Be realistic about what it can do:
 
-## ⚠️ Limitations
+🧩 With ~32M parameters and a limited training budget, answers can be repetitive, vague, or factually wrong.
 
-This is an **educational, small-scale model**. Be realistic about what it can do:
+🌍 It knows mostly what appeared in its training data (a large share of OceanInstruct concerns marine engineering and regional topics).
 
-- 🧩 With ~32M parameters and a limited training budget, answers can be **repetitive, vague, or factually wrong**.
-- 🌍 It knows mostly what appeared in its training data (a large share of OceanInstruct concerns marine engineering and regional topics).
-- 🗣 English only.
-- 🚫 **Do not use it for navigation, safety, scientific, or medical decisions.**
+🗣 English only.
 
----
+🚫 Do not use it for navigation, safety, scientific, or medical decisions.
 
-## 🗺 Roadmap
+🗺 Roadmap
+[x] Custom BPE tokenizer
 
-- [x] Custom BPE tokenizer
-- [x] Pretraining from random initialisation
-- [x] Instruction tuning on ocean data
-- [ ] Longer pretraining on a larger corpus
-- [ ] Add marine-biology Wikipedia text to pretraining
-- [ ] Evaluation on a held-out ocean Q&A set
-- [ ] Gradio web demo on Hugging Face Spaces
-- [ ] Scale to 100M+ parameters
+[x] Pretraining from random initialisation
 
----
+[x] Instruction tuning on ocean data
 
-## 🙏 Acknowledgements
+[ ] Longer pretraining on a larger corpus
 
-- [zjunlp](https://github.com/zjunlp) for the **OceanInstruct** dataset
-- [Hugging Face](https://huggingface.co/) for `transformers`, `datasets`, and `tokenizers`
-- [Kaggle](https://www.kaggle.com/) for free GPU compute
+[ ] Add marine-biology Wikipedia text to pretraining
 
----
+[ ] Evaluation on a held-out ocean Q&A set
 
-## 📜 Citation
+[ ] Gradio web demo on Hugging Face Spaces
 
-```bibtex
+[ ] Scale to 100M+ parameters
+
+🙏 Acknowledgements
+zjunlp for the OceanInstruct dataset
+
+Hugging Face for transformers, datasets, and tokenizers
+
+Kaggle for free GPU compute
+
+📜 Citation
+Extrait de code
 @misc{tahakarmani2026,
   title  = {Taha Karmani: A Small Ocean Language Model Trained From Scratch},
-  author = {Your Name},
+  author = {Taha Karmani},
   year   = {2026},
-  url    = {https://github.com/your-username/taha-karmani}
+  url    = {[https://github.com/taha56-cyber/taha-karmani](https://github.com/taha56-cyber/taha-karmani)}
 }
-```
+📄 License
+Released under the MIT License. Dataset licences apply to the training data.
 
----
-
-## 📄 License
-
-Released under the [MIT License](LICENSE). Dataset licences apply to the training data.
-
-<div align="center">
-
-**If you like this project, give it a ⭐ and share it!**
+If you like this project, give it a ⭐ and share it!
 
 Built with 🌊 and curiosity.
 
-</div>
+Push commands for taha56-cyber:
+Bash
+git init
+git add .
+git commit -m "Add README with embedded SVG animation and interactive HTML demo"
+git branch -M main
+git remote add origin https://github.com/taha56-cyber/taha-karmani.git
+git push -u origin main

@@ -39,7 +39,7 @@ Every layer of the stack was built and trained in this project:
 
 <div align="center">
 
-### ▶️ [Watch the animated explainer](https://your-username.github.io/taha-karmani/)
+### ▶️ [Watch the animated explainer](https://taha56-cyber.io/taha-karmani/)
 
 *An auto-playing, in-browser walkthrough: data → tokenizer → architecture → training → chat. Source: [`docs/index.html`](docs/index.html)*
 
